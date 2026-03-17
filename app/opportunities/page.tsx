@@ -113,31 +113,68 @@ export default function OpportunitiesPage() {
     // In Next.js App Router, this file maps to the URL "/opportunities" automatically.
     // Why this exists: this page is the central listing screen where users can discover opportunities.
     // How it fits the site: users arrive from the homepage and then choose a specific opportunity to open.
-    <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col items-center px-6 py-16 text-center">
+    <main className="opps-page relative isolate mx-auto min-h-screen w-full max-w-none overflow-hidden bg-[radial-gradient(1200px_500px_at_8%_-5%,rgba(14,165,233,0.2),transparent_65%),radial-gradient(900px_420px_at_95%_8%,rgba(20,184,166,0.18),transparent_62%),linear-gradient(to_bottom,#e8f3f5,#dff0ef_40%,#d7ece9_72%,#d4e8e7)] px-5 py-12 text-left sm:px-8 sm:py-14 lg:px-12 xl:px-16">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 opacity-35 [background-image:linear-gradient(rgba(15,23,42,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.08)_1px,transparent_1px)] [background-size:36px_36px]"
+      />
+      <div aria-hidden className="opps-orb opps-orb-a" />
+      <div aria-hidden className="opps-orb opps-orb-b" />
+      <div aria-hidden className="opps-orb opps-orb-c" />
       {/*
         This title tells visitors what this route is for.
         We keep it clear and specific so users instantly understand the page purpose.
         This page acts as the main discovery hub for opportunities on BlueLinks.
       */}
-      <h1 className="text-4xl font-bold tracking-tight text-slate-900">
-        Opportunities Hub
-      </h1>
+      <section className="relative overflow-hidden rounded-3xl border border-white/75 bg-gradient-to-br from-slate-900/88 via-slate-900/82 to-cyan-900/70 px-6 py-10 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.65)] backdrop-blur-sm sm:px-10 sm:py-12">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-gradient-to-br from-sky-300/40 to-cyan-200/10 blur-2xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-8 left-14 h-32 w-32 rounded-full bg-gradient-to-br from-emerald-300/35 to-teal-200/10 blur-2xl"
+        />
+
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300/90">
+          BlueLinks Platform
+        </p>
+        <h1 className="mt-3 max-w-4xl text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+          Opportunities Hub
+        </h1>
 
       {/*
         This short description sets expectations about the kinds of listings users will find.
         It helps first-time visitors understand the value of the page before real data is loaded.
       */}
-      <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-700">
-        Discover internships, fellowships, scholarships and jobs in
-        conservation, climate and ocean careers.
-      </p>
+        <p className="mt-5 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">
+          Discover internships, fellowships, scholarships and jobs in
+          conservation, climate and ocean careers.
+        </p>
+
+        <div className="mt-7 flex flex-wrap items-center gap-2.5">
+          <span className="rounded-full border border-cyan-300/30 bg-cyan-900/35 px-3 py-1.5 text-xs font-semibold tracking-wide text-cyan-100">
+            {sortedOpportunities.length} visible now
+          </span>
+          <span className="rounded-full border border-emerald-300/30 bg-emerald-900/30 px-3 py-1.5 text-xs font-semibold tracking-wide text-emerald-100">
+            Live from database
+          </span>
+          <span className="rounded-full border border-slate-400/35 bg-slate-900/45 px-3 py-1.5 text-xs font-semibold tracking-wide text-slate-200">
+            Updated in real time
+          </span>
+        </div>
+      </section>
 
       {/*
         We import the opportunities array from lib/opportunities.ts at the top.
         That shared dataset powers this list page and also the dynamic details page,
         so both pages stay in sync.
       */}
-      <section className="mt-8 flex w-full flex-wrap items-center justify-center gap-2">
+      {/*
+        Controls are grouped in one surface so filters feel like a single designed system.
+      */}
+      <section className="mt-8 rounded-2xl border border-teal-200/45 bg-gradient-to-br from-white/88 via-teal-50/72 to-cyan-50/66 p-4 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.45)] backdrop-blur sm:p-5">
+      <section className="flex w-full flex-wrap items-center gap-2">
         {categoryFilters.map((filter) => {
           const isActive = selectedCategory === filter;
 
@@ -146,10 +183,10 @@ export default function OpportunitiesPage() {
               key={filter}
               type="button"
               onClick={() => setSelectedCategory(filter)}
-              className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
                 isActive
-                  ? "bg-sky-700 text-white"
-                  : "bg-white text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50"
+                  ? "border-sky-700 bg-gradient-to-r from-sky-700 to-cyan-700 text-white shadow-[0_8px_20px_-10px_rgba(2,132,199,0.8)]"
+                  : "border-slate-300 bg-white/90 text-slate-700 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-white"
               }`}
             >
               {filter}
@@ -158,7 +195,7 @@ export default function OpportunitiesPage() {
         })}
       </section>
 
-      <section className="mt-4 w-full">
+      <section className="mt-3 w-full">
         <label htmlFor="opportunity-search" className="sr-only">
           Search opportunities
         </label>
@@ -168,32 +205,33 @@ export default function OpportunitiesPage() {
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.target.value)}
           placeholder="Search by title, organisation, or description"
-          className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-500 focus:border-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-200"
+          className="w-full rounded-xl border border-teal-200/80 bg-white/92 px-4 py-3 text-slate-900 placeholder:text-slate-500 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.35)] transition focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200"
         />
+      </section>
       </section>
 
       {selectedTag && (
-        <section className="mt-4 flex w-full items-center justify-between rounded-md border border-sky-200 bg-sky-50 px-4 py-3 text-left">
-          <p className="text-sm text-sky-900">
+        <section className="mt-4 flex w-full items-center justify-between rounded-xl border border-cyan-300/45 bg-gradient-to-r from-cyan-50/95 to-teal-50/90 px-4 py-3 text-left">
+          <p className="text-sm text-cyan-900">
             Active tag filter: <span className="font-semibold">{selectedTag}</span>
           </p>
           <button
             type="button"
             onClick={() => setSelectedTag(null)}
-            className="rounded-md bg-white px-3 py-1.5 text-sm font-medium text-sky-800 ring-1 ring-sky-300 hover:bg-sky-100"
+            className="rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium text-cyan-900 ring-1 ring-cyan-300/60 hover:bg-white"
           >
             Clear tag
           </button>
         </section>
       )}
 
-      <section className="mt-6 grid w-full gap-4 text-left">
+      <section className="mt-8 grid w-full grid-cols-1 gap-6 text-left lg:grid-cols-2">
         {/*
           We use map() after filtering.
           First we build filteredOpportunities, then map() turns each item into a card.
           This two-step pattern (filter, then map) is a core approach for discovery UIs.
         */}
-        {sortedOpportunities.map((opportunity) => {
+        {sortedOpportunities.map((opportunity, index) => {
           // substring(0, 120) keeps only the first 120 characters for a compact card preview.
           // We add "..." only when the original text is longer than 120 characters.
           const shortDescription =
@@ -243,21 +281,21 @@ export default function OpportunitiesPage() {
             // visual classes in the JSX.
             const cardClassName =
               deadlineStatus === "closed"
-                ? "overflow-hidden rounded-2xl border border-slate-300 bg-slate-50 opacity-85 shadow-sm transition"
+                ? "overflow-hidden rounded-2xl border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-50 shadow-lg shadow-slate-300/35 transition"
                 : deadlineStatus === "closingSoon"
-                  ? "overflow-hidden rounded-2xl border border-amber-300 bg-amber-50/40 shadow-sm transition hover:border-amber-400 hover:shadow-md"
-                  : "overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-sky-300 hover:shadow-md";
+                  ? "overflow-hidden rounded-2xl border border-amber-300/70 bg-gradient-to-br from-white to-amber-50/70 shadow-lg shadow-amber-200/35 transition hover:border-amber-300 hover:shadow-xl"
+                  : "overflow-hidden rounded-2xl border border-cyan-200/70 bg-gradient-to-br from-white to-cyan-50/55 shadow-lg shadow-cyan-200/35 transition hover:-translate-y-0.5 hover:border-cyan-300/70 hover:shadow-xl";
 
             const deadlineBlockClassName =
               deadlineStatus === "closed"
-                ? "space-y-2 rounded-lg bg-slate-100 px-3 py-2"
+                ? "min-w-[220px] space-y-2 rounded-xl border border-slate-300 bg-slate-100 px-3.5 py-2.5 sm:min-w-[250px]"
                 : deadlineStatus === "closingSoon"
-                  ? "space-y-2 rounded-lg bg-amber-100/70 px-3 py-2"
-                  : "space-y-2 rounded-lg bg-slate-50 px-3 py-2";
+                  ? "min-w-[220px] space-y-2 rounded-xl border border-amber-300/70 bg-amber-50/80 px-3.5 py-2.5 sm:min-w-[250px]"
+                  : "min-w-[220px] space-y-2 rounded-xl border border-cyan-200/80 bg-cyan-50/80 px-3.5 py-2.5 sm:min-w-[250px]";
 
           let closingStatusLabel = "";
           let closingStatusClassName =
-            "inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700";
+            "inline-flex items-center rounded-full bg-cyan-100 px-3 py-1 text-xs font-medium text-cyan-900";
 
             if (deadlineStatus === "closed") {
             closingStatusLabel = "Closed";
@@ -266,11 +304,11 @@ export default function OpportunitiesPage() {
             } else if (daysUntilDeadline === 0 || daysUntilDeadline === 1) {
             closingStatusLabel = "Closes tomorrow";
             closingStatusClassName =
-              "inline-flex items-center rounded-full bg-rose-50 px-3 py-1 text-xs font-medium text-rose-700";
+              "inline-flex items-center rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-800";
             } else if (deadlineStatus === "closingSoon") {
             closingStatusLabel = "Closing soon";
             closingStatusClassName =
-              "inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800";
+              "inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800";
           } else {
             closingStatusLabel = `Closing in ${daysUntilDeadline} days`;
           }
@@ -280,7 +318,11 @@ export default function OpportunitiesPage() {
             // Top: title, category, organisation, and location for quick scanning.
             // Middle: short description preview.
             // Bottom: highlighted deadline and a clear action button.
-              <article key={opportunity.slug} className={cardClassName}>
+              <article
+                key={opportunity.slug}
+                className={`${cardClassName} opps-card-reveal`}
+                style={{ animationDelay: `${Math.min(index * 60, 360)}ms` }}
+              >
               {opportunity.image_url ? (
                 <div className="relative h-40 w-full rounded-t-2xl">
                   <img
@@ -288,20 +330,21 @@ export default function OpportunitiesPage() {
                     alt={opportunity.title}
                     className="h-full w-full object-cover"
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-slate-900/20 to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_12%,rgba(255,255,255,0.3),transparent_35%)]" />
                 </div>
               ) : (
-                <div className="flex h-40 w-full items-center justify-center rounded-t-2xl bg-slate-200 text-sm font-medium text-slate-600">
+                <div className="flex h-40 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-slate-200 to-slate-300/85 text-sm font-medium tracking-wide text-slate-700">
                   no image yet
                 </div>
               )}
 
               <div className="space-y-5 p-6 sm:p-7">
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+                <h2 className="text-2xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-[1.7rem]">
                   {opportunity.title}
                 </h2>
-                <p className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-sm font-medium text-sky-800">
+                <p className="inline-flex rounded-full border border-cyan-300/70 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
                   {opportunity.category}
                 </p>
               </div>
@@ -311,7 +354,7 @@ export default function OpportunitiesPage() {
                 <p className="text-sm font-medium text-slate-700">{opportunity.location}</p>
               </div>
 
-              <p className="text-sm leading-relaxed text-slate-700">{shortDescription}</p>
+              <p className="text-sm leading-7 text-slate-700">{shortDescription}</p>
 
               {/*
                 map() loops through the tags array and returns one pill element per tag.
@@ -329,10 +372,10 @@ export default function OpportunitiesPage() {
                         previous === tag ? null : tag,
                       )
                     }
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                    className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                       selectedTag === tag
-                        ? "bg-sky-700 text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        ? "border-sky-700 bg-sky-700 text-white"
+                        : "border-slate-200 bg-white/90 text-slate-700 hover:border-cyan-300/60 hover:bg-cyan-50/50"
                     }`}
                   >
                     {tag}
@@ -346,7 +389,7 @@ export default function OpportunitiesPage() {
                 We place them in a left-side info block and keep the action button on the
                 right side to avoid crowding.
               */}
-              <div className="flex flex-wrap items-end justify-between gap-4 border-t border-slate-100 pt-5">
+              <div className="flex flex-wrap items-end justify-between gap-4 border-t border-slate-200/80 pt-5">
                 {/*
                   The deadline date is primary because users trust the concrete date most.
                   The urgency label is secondary context (helpful, but not more important
@@ -355,8 +398,11 @@ export default function OpportunitiesPage() {
                   can quickly scan which cards need immediate action.
                 */}
                 <div className={deadlineBlockClassName}>
+                  <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                    Deadline
+                  </p>
                   <p className="text-base font-semibold text-slate-900">
-                    Deadline: {formattedDeadline}
+                    {formattedDeadline}
                   </p>
                   <p className={closingStatusClassName}>{closingStatusLabel}</p>
                 </div>
@@ -370,7 +416,7 @@ export default function OpportunitiesPage() {
                 */}
                 <Link
                   href={`/opportunities/${opportunity.slug}`}
-                  className="inline-flex rounded-md bg-sky-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sky-800"
+                  className="inline-flex rounded-lg bg-gradient-to-r from-slate-900 to-cyan-800 px-4 py-2.5 text-sm font-semibold text-white transition hover:from-slate-800 hover:to-cyan-700"
                 >
                   View Details
                 </Link>
@@ -381,13 +427,13 @@ export default function OpportunitiesPage() {
         })}
 
         {!isLoading && sortedOpportunities.length === 0 && (
-          <p className="rounded-lg border border-dashed border-slate-300 bg-white p-6 text-slate-600">
+          <p className="rounded-2xl border border-dashed border-cyan-200/70 bg-white/85 p-6 text-slate-700 shadow-lg shadow-cyan-200/25">
             No opportunities match your current category and search filters.
           </p>
         )}
 
         {isLoading && (
-          <p className="rounded-lg border border-dashed border-slate-300 bg-white p-6 text-slate-600">
+          <p className="rounded-2xl border border-dashed border-cyan-200/70 bg-white/85 p-6 text-slate-700 shadow-lg shadow-cyan-200/25">
             Loading opportunities from the database...
           </p>
         )}

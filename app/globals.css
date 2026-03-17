@@ -22,5 +22,95 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+}
+
+/*
+  Premium opportunities page motion styles.
+  We keep them page-scoped with explicit class names so other routes are unaffected.
+*/
+@keyframes oppsDriftA {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(16px, -10px, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes oppsDriftB {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-18px, 14px, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes oppsReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.opps-orb {
+  pointer-events: none;
+  position: absolute;
+  z-index: -10;
+  border-radius: 9999px;
+  filter: blur(52px);
+}
+
+.opps-orb-a {
+  top: 14%;
+  left: -80px;
+  height: 240px;
+  width: 240px;
+  background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.45), rgba(56, 189, 248, 0));
+  animation: oppsDriftA 15s ease-in-out infinite;
+}
+
+.opps-orb-b {
+  top: 52%;
+  right: -90px;
+  height: 280px;
+  width: 280px;
+  background: radial-gradient(circle at 70% 35%, rgba(45, 212, 191, 0.4), rgba(45, 212, 191, 0));
+  animation: oppsDriftB 18s ease-in-out infinite;
+}
+
+.opps-orb-c {
+  bottom: -80px;
+  left: 38%;
+  height: 220px;
+  width: 220px;
+  background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.28), rgba(14, 165, 233, 0));
+  animation: oppsDriftA 20s ease-in-out infinite;
+}
+
+.opps-card-reveal {
+  opacity: 0;
+  animation: oppsReveal 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opps-orb-a,
+  .opps-orb-b,
+  .opps-orb-c,
+  .opps-card-reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
