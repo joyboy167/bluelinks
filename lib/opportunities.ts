@@ -8,18 +8,22 @@
 // predictable format across the app. This keeps code easier to read, safer to
 // refactor, and simpler to scale as more data is added.
 export type Opportunity = {
+  id: number;
   slug: string;
   title: string;
   organisation: string;
   location: string;
-  deadline: string;
+  mode?: string;
+  deadline?: string;
   category: string;
-  // Tags are short keyword labels that describe the opportunity.
-  // They help categorize content in a flexible way beyond one category field.
-  // Example tags: ["Marine", "Climate", "Fieldwork"].
-  tags: string[];
   description: string;
-  applyUrl: string;
+  apply_url?: string;
+  tags?: string[];
+
+  // NEW FIELDS
+  image_url?: string;
+  eligibility?: string;
+  compensation_type?: string;
 };
 
 // A slug is a URL-friendly identifier (usually lowercase with hyphens).
@@ -33,6 +37,7 @@ export type Opportunity = {
 // matching params.slug to opportunity.slug.
 export const opportunities: Opportunity[] = [
   {
+    id: 1,
     slug: "marine-conservation-internship",
     title: "Marine Conservation Internship",
     organisation: "Island Conservation Society",
@@ -41,9 +46,10 @@ export const opportunities: Opportunity[] = [
     category: "Internship",
     tags: ["Marine", "Fieldwork", "Seychelles"],
     description: "Support reef monitoring and community outreach.",
-    applyUrl: "https://example.org/apply",
+    apply_url: "https://example.org/apply",
   },
   {
+    id: 2,
     slug: "blue-economy-fellowship",
     title: "Blue Economy Youth Fellowship",
     organisation: "Seychelles Blue Futures Initiative",
@@ -53,9 +59,10 @@ export const opportunities: Opportunity[] = [
     tags: ["Blue Economy", "Policy", "Early Career"],
     description:
       "A one-year fellowship for young leaders working on sustainable ocean innovation and policy.",
-    applyUrl: "https://example.org/opportunities/blue-economy-fellowship",
+    apply_url: "https://example.org/opportunities/blue-economy-fellowship",
   },
   {
+    id: 3,
     slug: "coastal-resilience-scholarship",
     title: "Coastal Resilience Scholarship",
     organisation: "Indian Ocean Climate Network",
@@ -65,6 +72,6 @@ export const opportunities: Opportunity[] = [
     tags: ["Climate", "Scholarship", "Fully Funded"],
     description:
       "Funding support for students pursuing studies in climate adaptation and coastal resilience.",
-    applyUrl: "https://example.org/opportunities/coastal-resilience-scholarship",
+    apply_url: "https://example.org/opportunities/coastal-resilience-scholarship",
   },
 ];

@@ -68,7 +68,7 @@ export default async function OpportunityDetailsPage({
       </p>
 
       <Link
-        href={opportunity.applyUrl}
+        href={opportunity.apply_url ?? "#"}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-8 inline-flex w-fit rounded-md bg-sky-700 px-5 py-3 font-semibold text-white transition-colors hover:bg-sky-800"

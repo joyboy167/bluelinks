@@ -47,13 +47,14 @@ export default function OpportunitiesPage() {
     let isMounted = true;
 
     const loadOpportunities = async () => {
-      const data = await getOpportunities();
+      const opportunities = await getOpportunities();
+      console.log(opportunities);
 
       if (!isMounted) {
         return;
       }
 
-      setOpportunitiesData((data ?? []) as Opportunity[]);
+      setOpportunitiesData((opportunities ?? []) as Opportunity[]);
       setIsLoading(false);
     };
 
@@ -89,7 +90,7 @@ export default function OpportunitiesPage() {
     // opportunity.tags array.
     // If no tag is selected, every opportunity passes this check.
     const matchesTag =
-      selectedTag === null || opportunity.tags.includes(selectedTag);
+      selectedTag === null || (opportunity.tags ?? []).includes(selectedTag);
 
     return matchesCategory && matchesSearch && matchesTag;
   });
@@ -98,8 +99,12 @@ export default function OpportunitiesPage() {
   // and ordered by soonest deadline first.
   // Date strings are converted into numeric timestamps for reliable comparison.
   const sortedOpportunities = filteredOpportunities.sort((a, b) => {
-    const dateA = new Date(a.deadline).getTime();
-    const dateB = new Date(b.deadline).getTime();
+    const dateA = a.deadline
+      ? new Date(a.deadline).getTime()
+      : Number.POSITIVE_INFINITY;
+    const dateB = b.deadline
+      ? new Date(b.deadline).getTime()
+      : Number.POSITIVE_INFINITY;
 
     return dateA - dateB;
   });
@@ -238,10 +243,10 @@ export default function OpportunitiesPage() {
             // visual classes in the JSX.
             const cardClassName =
               deadlineStatus === "closed"
-                ? "rounded-xl border border-slate-300 bg-slate-50 p-6 opacity-80 shadow-sm transition"
+                ? "overflow-hidden rounded-2xl border border-slate-300 bg-slate-50 opacity-85 shadow-sm transition"
                 : deadlineStatus === "closingSoon"
-                  ? "rounded-xl border border-amber-300 bg-amber-50/40 p-6 shadow-sm transition hover:border-amber-400 hover:shadow-md"
-                  : "rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-sky-300 hover:shadow-md";
+                  ? "overflow-hidden rounded-2xl border border-amber-300 bg-amber-50/40 shadow-sm transition hover:border-amber-400 hover:shadow-md"
+                  : "overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-sky-300 hover:shadow-md";
 
             const deadlineBlockClassName =
               deadlineStatus === "closed"
@@ -276,8 +281,24 @@ export default function OpportunitiesPage() {
             // Middle: short description preview.
             // Bottom: highlighted deadline and a clear action button.
               <article key={opportunity.slug} className={cardClassName}>
+              {opportunity.image_url ? (
+                <div className="relative h-40 w-full rounded-t-2xl">
+                  <img
+                    src={opportunity.image_url}
+                    alt={opportunity.title}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
+                </div>
+              ) : (
+                <div className="flex h-40 w-full items-center justify-center rounded-t-2xl bg-slate-200 text-sm font-medium text-slate-600">
+                  no image yet
+                </div>
+              )}
+
+              <div className="space-y-5 p-6 sm:p-7">
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <h2 className="text-xl font-semibold text-slate-900">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-900">
                   {opportunity.title}
                 </h2>
                 <p className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-sm font-medium text-sky-800">
@@ -285,10 +306,12 @@ export default function OpportunitiesPage() {
                 </p>
               </div>
 
-              <p className="mt-2 text-slate-700">{opportunity.organisation}</p>
-              <p className="mt-1 text-slate-600">{opportunity.location}</p>
+              <div className="space-y-1">
+                <p className="text-base font-semibold text-slate-900">{opportunity.organisation}</p>
+                <p className="text-sm font-medium text-slate-700">{opportunity.location}</p>
+              </div>
 
-              <p className="mt-4 leading-relaxed text-slate-700">{shortDescription}</p>
+              <p className="text-sm leading-relaxed text-slate-700">{shortDescription}</p>
 
               {/*
                 map() loops through the tags array and returns one pill element per tag.
@@ -296,8 +319,8 @@ export default function OpportunitiesPage() {
                 Tags improve discovery because users can quickly scan themes like
                 "Marine", "Policy", or "Fieldwork" before opening details.
               */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {opportunity.tags.map((tag) => (
+              <div className="flex flex-wrap gap-2">
+                {(opportunity.tags ?? []).map((tag) => (
                   <button
                     type="button"
                     key={`${opportunity.slug}-${tag}`}
@@ -323,7 +346,7 @@ export default function OpportunitiesPage() {
                 We place them in a left-side info block and keep the action button on the
                 right side to avoid crowding.
               */}
-              <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-slate-100 pt-4">
+              <div className="flex flex-wrap items-end justify-between gap-4 border-t border-slate-100 pt-5">
                 {/*
                   The deadline date is primary because users trust the concrete date most.
                   The urgency label is secondary context (helpful, but not more important
@@ -351,6 +374,7 @@ export default function OpportunitiesPage() {
                 >
                   View Details
                 </Link>
+              </div>
               </div>
             </article>
           );
